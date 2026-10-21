@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+
+<body>
+    <div class="sub-body" layout:fragment="content">
+        <div class="main-content">
+            <div class="post-details">
+                    <div class="first-row-post-detail">
+                        <a class="post-detail-picture" th:href="@{/community/{communityName}(communityName=${post.community.name})}"><img class="community-profile-picture-post-detail" th:src="${post.community.communityPictureUrl}"></a>
+                        <div class="community-username-column-post-detail">
+                            <a class="post-detail-community" th:href="@{/community/{communityName}(communityName=${post.community.name})}"><span th:text="${post.community.name}"></span></a>
+                            <a class="post-detail-created-by-link" th:href="@{/profile/{vUserId}/posts(vUserId=${post.createdBy.id})}"><span th:text="${post.createdBy.username}"></span></a>
+                        </div>
+                        <span class="created-on-post-detail" th:text="${#temporals.format(post.createdOn, 'dd-MM-yyyy, HH:mm')}"></span>
+                        <div class="post-detail-edit-delete-post" th:if="${user != null and user.id == post.createdBy.id}">
+                            <a class="edit-post-link" th:href="@{/posts/{postId}/edit(postId=${post.id})}">Edit Post</a>
+                            <a class="delete-post-link" th:href="@{/posts/{postId}/delete(postId=${post.id})}">Delete Post</a>
+                        </div>
+                    </div>
+                    <span class="title-post-detail" th:text="${post.title}"></span>
+                    <div th:if="${!#strings.isEmpty(post.photoUrl)}">
+                        <img class="post-picture-index" th:if="${post.photoUrl}" th:src="${post.photoUrl}">
+                    </div>
+                    <span class="description-post-detail" th:text="${post.description}"></span>
+                <div class="vote-button-post-detail">
+                    <form role="form" method="post" th:action="@{/posts/{postId}/upvote(postId=${post.id})}" th:object="${upvotePost}">
+
+                        <input type="hidden" name="returnUrl" th:value="@{/posts/{postId}(postId=${post.id})}">
+
+                        <input type="image" class="upvote-button-index" src="https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg">
+                    </form>
+                    <span th:text="${post.votes}"></span>
+                    <form role="form" method="post" th:action="@{/posts/{postId}/downvote(postId=${post.id})}" th:object="${downvotePost}">
+
+                        <input type="hidden" name="returnUrl" th:value="@{/posts/{postId}(postId=${post.id})}">
+
+                        <input type="image" class="downvote-button-index" src="https://png.pngtree.com/png-vector/20190411/ourmid/pngtree-vector-down-arrow-icon-png-image_925727.jpg">
+                    </form>
+                </div>
+            </div>
+
+            <div sec:authorize="isAuthenticated()" class="comment-to-post-div">
+                    <form class="comment-to-post-form" role="form" method="post" th:action="@{/posts/{postId}(postId=${post.id})}" th:object="${comment}">
+                        <input 
+                                name="comment"
+                                th:field="*{comment}"
+                                placeholder="Join the conversation"
+                                type="text"
+                                class="comment-to-post-text-input"
+                        >
+                        <p class="error-class" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}"></p>
+                        <input class="comment-to-post-submit-input" type="submit" value="Comment">
+
+                    </form>
+            </div>
+
+            <div sec:authorize="!isAuthenticated()" class="comment-to-post-div">
+                    <form class="comment-to-post-form" th:action="@{/login}" th:object="${comment}">
+                        <input 
+                                name="comment"
+                                th:field="*{comment}"
+                                placeholder="Join the conversation"
+                                type="text"
+                                class="comment-to-post-text-input"
+                        >
+                        <p class="error-class" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}"></p>
+                        <input class="comment-to-post-submit-input" type="submit" value="Comment">
+
+                    </form>
+            </div>
+
+
+            <div class="comment-list-div" th:each="comment : ${comments}">
+                <div th:replace="~{fragments/comment :: commentTree(${comment})}"></div>           
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+</html>

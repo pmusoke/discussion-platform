@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+
+<body>
+    <div class="sub-body" layout:fragment="content">
+        <div class="main-content">
+            <div class="create-form-div">
+                <form roles="form" method="post" th:action="@{/comments/{commentId}/edit(commentId=${comment.id})}" th:object="${comment}">
+
+
+                    <div class="form-field">
+                        <label for="name">Comment</label>
+                        <input 
+                                name="comment"
+                                th:field="*{comment}"
+                                placeholder="comment"
+                                type="text"
+                        >
+                    </div>
+
+                    <input class="create-button" type="submit" value="Update Comment">
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    
+</body>
+
+</html>

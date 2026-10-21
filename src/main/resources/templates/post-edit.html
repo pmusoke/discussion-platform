@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+
+<body>
+    <div layout:fragment="content">
+        <div class="sub-body">
+            <div class="main-content">
+                <div class="create-form-div">
+                    <form class="create-post-form" role="form" method="post" th:action="@{/posts/{postId}/edit(postId=${post.id})}" th:object="${post}">
+
+                        <span>Edit post</span>
+
+                        <div class="form-field">
+                            <label for="title">Title</label>
+                            <input 
+                                    name="title"
+                                    th:field="*{title}"
+                                    placeholder="Title"
+                                    type="text"
+                                    class="title-input-post-create"
+                            >
+                            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="description">Description</label>
+                            <input 
+                                    name="description"
+                                    th:field="*{description}"
+                                    placeholder="Description"
+                                    type="text"
+                                    class="description-input-post-create"
+                            >
+                            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="photoUrl">Photo URL</label>
+                            <input 
+                                    name="photoUrl"
+                                    th:field="*{photoUrl}"
+                                    placeholder="PhotoUrl"
+                                    type="text"
+                                    class="photo-url-input-post-create"
+                            >
+                            <p th:if="${#fields.hasErrors('photoUrl')}" th:errors="*{photoUrl}"></p>
+                        </div>
+
+                        <input class="create-button" type="submit" value="Edit Post">
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    
+</body>
+
+</html>

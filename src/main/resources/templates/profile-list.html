@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+
+<body>
+    <div class="sub-body" layout:fragment="content">
+        <div class="main-content">
+
+            <div th:if="${message}">
+                <h1 th:text="${message}"></h1>
+            </div>
+
+            <div>
+                <a th:href="@{/posts/search?query={search}(search=${search})}">Posts</a>
+                <a th:href="@{/communities/search?query={search}(search=${search})}">Communities</a>
+                <a th:href="@{/comments/search?query={search}(search=${search})}">Comments</a>
+                <a th:href="@{/users/search?query={search}(search=${search})}">Users</a>
+            </div>
+
+            <div th:if="${emptyResults}">
+                <h1 th:text="${emptyResults}"></h1>
+            </div>
+
+
+
+            <div class="user-list-index" th:each="suser : ${users}">
+                <a th:href="@{/profile/{vUserId}/posts(vUserId=${suser.id})}"><img th:src="${suser.photoUrl}" class="user-profile-picture-index"></a>
+                <a class="profile-list-username" th:href="@{/profile/{vUserId}/posts(vUserId=${suser.id})}"><span th:text="${suser.username}"></span></a>
+                
+
+            </div>
+        </div>
+    </div>
+
+
+
+    
+</body>
+
+</html>

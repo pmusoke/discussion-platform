@@ -1,0 +1,59 @@
+<div th:fragment="commentTree(comment)">
+
+
+    <div class="comment-item">
+
+        <div class="comment-username-created-on">
+            <img class="comment-creator-profile-picture" th:src="${comment.createdBy.photoUrl}">
+            <span class="comment-creator" th:text="${comment.createdBy.username}"></span>
+            <span class="comment-createdOn" th:text="${#temporals.format(comment.createdOn, 'dd-MM-yyyy, HH:mm')}"></span>
+            <div th:if="${user !=null and user.id == comment.createdBy.id}">
+                <a class="comment-edit" th:href="@{/comments/{commentId}/edit(commentId=${comment.id})}"> Edit</a>
+                <a class="comment-delete" th:href="@{/comments/{commentId}/delete(commentId=${comment.id})}"> Delete</a>
+            </div>
+        </div>
+
+        <div class="comment-content" th:text="${comment.comment}"></div>
+
+        <div class="vote-button-comment">
+            <form sec:authorize="isAuthenticated()" method="post" th:action="@{/comment/{commentId}/upvote(commentId=${comment.id})}" th:object="${upvoteComment}">
+
+                <input type="hidden" name="returnUrl" th:value="@{/posts/{postId}(postId=${post.id})} ">
+
+                <input type="image" class="upvote-button-index" src="https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg">
+            </form>
+            <a sec:authorize="!isAuthenticated()"  th:href="@{/login}"><img class="login-button-body-via-vote" src="https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg"></a>
+            <span th:text="${comment.votes}"></span>
+            <form sec:authorize="isAuthenticated()" method="post" th:action="@{/comment/{commentId}/downvote(commentId=${comment.id})}" th:object="${downvoteComment}">
+
+                <input type="hidden" name="returnUrl" th:value="@{/posts/{postId}(postId=${post.id})}">
+
+                <input type="image" class="downvote-button-comment" src="https://png.pngtree.com/png-vector/20190411/ourmid/pngtree-vector-down-arrow-icon-png-image_925727.jpg">
+            </form>
+            <a sec:authorize="!isAuthenticated()" th:href="@{/login}"><img class="login-button-body-via-vote" src="https://png.pngtree.com/png-vector/20190411/ourmid/pngtree-vector-down-arrow-icon-png-image_925727.jpg"></a>
+
+
+        </div>
+
+
+
+        <form  sec:authorize="isAuthenticated()" method="post" th:action="@{/posts/{postId}/{parentId}( postId=${comment.post.id}, parentId=${comment.id})}" th:object="${comment}">
+            <input
+                class="reply-input"
+                type="text"
+                th:field="*{comment}"
+                th:placeholder="'Reply to ' + ${comment.createdBy.username}"
+            >
+            <p class="error-class" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}"></p>
+            <input class="create-reply" type="submit" value="Comment">
+        </form>
+
+        <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="login-button-reply">Login To Reply</a>
+
+        <div class="comment-replies" th:if="${comment.replies != null}">
+            <div th:each="reply : ${comment.replies}">
+                <div th:replace="~{fragments/comment :: commentTree(${reply})}"></div>
+            </div>
+        </div>
+    </div>
+</div>

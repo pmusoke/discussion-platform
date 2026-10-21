@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+
+<body>
+    <div class="sub-body" layout:fragment="content">
+
+        <div class="main-content">
+
+            <div class="create-form-div">
+                <form roles="form" method="post" th:action="@{/communities/new}" th:object="${community}">
+
+                    <h1>Tell us about your community</h1>
+                    <p>A name and description help people understand what your community is all about.</p>
+
+
+                    <div class="form-field">
+                        <label for="name">Name</label>
+                        <input 
+                                name="name"
+                                th:field="*{name}"
+                                placeholder="Name"
+                                type="text"
+                        >
+                        <p class="error-class" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="description">Description</label>
+                        <input 
+                                name="description"
+                                th:field="*{description}"
+                                placeholder="Description"
+                                type="text"
+                        >
+                        <p class="error-class" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                    </div>
+
+                    <div class="form-field">
+                    <label for="communityPictureUrl">Community Picture URL (optional)</label>
+                        <input 
+                                name="communityPictureUrl"
+                                th:field="*{communityPictureUrl}"
+                                placeholder="PictureUrl"
+                                type="text"
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="communityPictureHeaderUrl">Banner Image URL (optional)</label>
+                        <input 
+                                name="communityPictureHeaderUrl"
+                                th:field="*{communityPictureHeaderUrl}"
+                                placeholder="PictureUrl"
+                                type="text"
+                        >
+
+                        
+                    </div>
+                    <input class="create-button" type="submit" value="Create Community">
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    
+</body>
+
+</html>

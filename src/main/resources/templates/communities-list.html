@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+
+<body>
+    <div class="sub-body" layout:fragment="content">
+        <div class="main-content">
+
+            <div th:if="${message}">
+                <h1 th:text="${message}"></h1>
+            </div>
+
+            <div>
+                <a th:href="@{/posts/search?query={search}(search=${search})}">Posts</a>
+                <a th:href="@{/communities/search?query={search}(search=${search})}">Communities</a>
+                <a th:href="@{/comments/search?query={search}(search=${search})}">Comments</a>
+                <a th:href="@{/users/search?query={search}(search=${search})}">Users</a>
+            </div>
+
+            <div th:if="${emptyResults}">
+                <h1 th:text="${emptyResults}"></h1>
+            </div>
+
+
+
+            <div class="community-list-index" th:each="com : ${communitys}">
+
+                <a th:href="@{/community/{communityName}(communityName=${com.name})}"><img class="community-profile-picture-index" th:src="${com.communityPictureUrl}"></a>
+                <a class="communities-list-name" th:href="@{/community/{communityName}(communityName=${com.name})}"><span th:text="${com.name}"></span></a>
+                <a class="communities-list-description" th:href="@{/community/{communityName}(communityName=${com.name})}"><span th:text="${com.description}"></span></a>
+                
+
+            </div>
+        </div>
+    </div>
+
+
+
+    
+</body>
+
+</html>

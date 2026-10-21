@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Discussion Platform</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+
+
+<body>
+    <div class="top-navigation-pannel">
+        <span class="reddit-button"><a th:href="@{/index}">Index</a></span>
+
+        <div class="reduced-navigation-actions">
+            <a sec:authorize="isAuthenticated()" class="home-layout" th:href="@{/home}"><img class="home-picture" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQouclhRnA9HRLxCmAlAQ1kgZNxAJREc6aPZm8qoGARgXU65g9ZM6F2_7U&s=10"> Home</a>
+            <a sec:authorize="isAuthenticated()" class="start-a-community-layout" th:href="@{/communities/new}"><img class="second-plus-picture" src="https://cdn-icons-png.freepik.com/512/2549/2549959.png">Start A Community</a>
+        </div>
+
+        <form th:action="@{/posts/search}" class="find-anything-bar">
+            <input name="query" type="search" placeholder="Find Anything">
+        </form>
+
+        <div class="actions">
+            <a class="login-button" sec:authorize="!isAuthenticated()" th:href="@{/login}">Log In</a>
+            <a class="sign-up-button" sec:authorize="!isAuthenticated()" th:href="@{/register}">Sign Up</a>
+
+            <a class="create-post-button" sec:authorize="isAuthenticated()" th:href="@{/posts/new}"><img class="create-post-button-picture" src="https://cdn-icons-png.freepik.com/512/2549/2549959.png">Create</a>
+            <form class="log-out-button" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                <input type="submit" value="Log Out">
+            </form>
+
+            <a sec:authorize="isAuthenticated()" th:href="@{/profile/{userId}/posts(userId=${user.id})}"><img class="profile-picture" sec:authorize="isAuthenticated()" th:src="${user.photoUrl}"></a>
+        </div>
+
+        
+    </div>
+
+
+    <div class="left-pannel">
+        <ul>
+            <li sec:authorize="isAuthenticated()"><a class="home-layout" th:href="@{/home}"><img class="home-picture" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQouclhRnA9HRLxCmAlAQ1kgZNxAJREc6aPZm8qoGARgXU65g9ZM6F2_7U&s=10"> Home</a></li>
+            <li sec:authorize="isAuthenticated()"><a class="start-a-community-layout" th:href="@{/communities/new}"><img class="second-plus-picture" src="https://cdn-icons-png.freepik.com/512/2549/2549959.png">Start A Community</a></li>
+            <li sec:authorize="!isAuthenticated()">Join the most real place on the internet</li>
+
+            <span sec:authorize="isAuthenticated()">Communities</span>
+            <div sec:authorize="isAuthenticated()" th:each="community : ${communities}">
+                <div class="left-pannel-community-list">
+                    <a class="left-pannel-community-picture-link" th:href="@{/community/{communityName}(communityName=${community.name})}"><img class="left-pannel-community-profile-picture" th:src="${community.communityPictureUrl}"></a>
+                    <a class="left-pannel-community-name-link" th:href="@{/community/{communityName}(communityName=${community.name})}"><span th:text="${community.name}"></span></a>
+                </div>
+                
+
+            </div>
+
+        </ul>
+
+        
+    </div>
+
+    <main layout:fragment="content">
+    </main>
+</body>
+
+</html>
+

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+
+<body>
+    <div class="sub-body" layout:fragment="content">
+        <div class="main-content">
+
+            <div th:if="${message}">
+                <h1 th:text="${message}"></h1>
+            </div>
+
+            <div>
+                <a th:href="@{/posts/search?query={search}(search=${search})}">Posts</a>
+                <a th:href="@{/communities/search?query={search}(search=${search})}">Communities</a>
+                <a th:href="@{/comments/search?query={search}(search=${search})}">Comments</a>
+                <a th:href="@{/users/search?query={search}(search=${search})}">Users</a>
+            </div>
+
+            <div th:if="${emptyResults}">
+                <h1 th:text="${emptyResults}"></h1>
+            </div>
+
+
+
+            <div class="post-list-index-search" th:each="post : ${posts}">
+                
+                    <div class="first-row-post-index">
+                        <a class="community-picture-index-link" th:href="@{/community/{communityName}(communityName=${post.community.name})}"><img class="community-profile-picture-index" th:src="${post.community.communityPictureUrl}"></a>
+                        <a class="community-name-index-link" th:href="@{/community/{communityName}(communityName=${post.community.name})}"><span class="community-name-index" th:text="${post.community.name}"></span></a>
+                        <a class="created-on-link-index" th:href="@{/posts/{postId}(postId=${post.id})}"><span class="created-on-index" th:text="${#temporals.format(post.createdOn, 'dd-MM-yyyy, HH:mm')}"></span></a>
+                    </div>
+                    <a class="post-title-index" th:href="@{/posts/{postId}(postId=${post.id})}"><span class="title-index" th:text="${post.title}"></span></a>           
+                    <div th:if="${!#strings.isEmpty(post.photoUrl)}">
+                        <a class="post-index" th:href="@{/posts/{postId}(postId=${post.id})}"><img class="post-picture-index" th:if="${post.photoUrl}" th:src="${post.photoUrl}"></a>
+                    </div>
+                        <div class="vote-button-index">
+                            <form role="form" method="post" th:action="@{/posts/{postId}/upvote(postId=${post.id})}" th:object="${upvotePost}">
+
+                                <input type="hidden" name="returnUrl" th:value="@{/posts/search?query={search}(search=${search})}">
+
+                                <input type="image" class="upvote-button-index" src="https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg">
+                            </form>
+                            <span th:text="${post.votes}"></span>
+                            <form role="form" method="post" th:action="@{/posts/{postId}/downvote(postId=${post.id})}" th:object="${downvotePost}">
+
+                                <input type="hidden" name="returnUrl" th:value="@{/posts/search?query={search}(search=${search})}">
+
+                                <input type="image" class="downvote-button-index" src="https://png.pngtree.com/png-vector/20190411/ourmid/pngtree-vector-down-arrow-icon-png-image_925727.jpg">
+                            </form>
+                        </div>
+                
+
+            </div>
+        </div>
+    </div>
+
+
+
+    
+</body>
+
+</html>

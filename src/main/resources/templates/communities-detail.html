@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+
+<body>
+    <div class="sub-body" layout:fragment="content">
+
+        <div class="main-content">
+
+            <div class="community-visuals-div">
+                <img class="community-picture-header-detail" th:src="${community.communityPictureHeaderUrl}">
+                <div class="community-picture-name-detail">
+                    <img class="community-picture-detail" th:src="${community.communityPictureUrl}">
+                    <span class="community-name-detail" th:text="${community.name}"></span>
+
+                    <a sec:authorize="isAuthenticated()" class="create-post-community-detail" th:href="@{/posts/new}">
+                        <img class="plus-picture-community-detail" src="https://cdn-icons-png.freepik.com/512/2549/2549959.png">
+                        <span>Create Post</span>
+                    </a>       
+
+                    <form sec:authorize="isAuthenticated()" th:if="${membershipDto == null}" roles="form" method="post" th:action="@{/communities/join/{communityId}(communityId=${community.id})}" th:object="${membership}">
+                        <input class="community-detail-join" type="submit" value="Join">
+                    </form>
+
+                    <form sec:authorize="isAuthenticated()" th:if="${membershipDto != null}" roles="form" method="post" th:action="@{/communities/unjoin/{communityId}(communityId=${community.id})}" th:object="${membership}">
+                        <input class="community-detail-join" type="submit" value="Joined">
+                    </form>
+
+                    <a sec:authorize="!isAuthenticated()" class="create-post-community-detail" th:href="@{/login}">
+                        <img class="plus-picture-community-detail" src="https://cdn-icons-png.freepik.com/512/2549/2549959.png">
+                        <span>Create Post</span>
+                    </a>   
+
+                    <form sec:authorize="!isAuthenticated() "th:action="@{/login}">
+                        <input class="community-detail-join" type="submit" value="Join">
+                    </form>
+
+
+                </div>
+            </div>
+
+
+            <div class="posts-and-right-pannel-community-detail">
+                <div class="community-post-list-detail">
+
+                    <div th:if="${posts.isEmpty()}">
+                        No Posts Yet
+                    </div>
+
+                    <div class="community-post-detail" th:each="post: ${posts}">
+                            <div class="communities-detail-post-first-row">
+                                <a class="communities-detail-post-created-by-photourl" th:href="@{/profile/{vUserId}/posts(vUserId=${post.createdBy.id})}"><img class="post-created-by-photourl-community-detail" th:src="${post.createdBy.photoUrl}"></a>
+                                <a class="communities-detail-post-created-by" th:href="@{/profile/{vUserId}/posts(vUserId=${post.createdBy.id})}"><span th:text="${post.createdBy.username}"></span></a>
+                                <a class="community-post-created-on" th:href="@{/posts/{postId}(postId=${post.id})}"><span th:text="${#temporals.format(post.createdOn, 'dd-MM-yyyy, HH:mm')}"></span></a>
+                            </div>
+
+                            <a class="communities-detail-post-title" th:href="@{/posts/{postId}(postId=${post.id})}"><span th:text="${post.title}"></span></a>
+                            <div th:if="${!#strings.isEmpty(post.photoUrl)}">
+                                <a th:href="@{/posts/{postId}(postId=${post.id})}"><img class="communities-detail-post-photo-img" th:if="${post.photoUrl}" th:src="${post.photoUrl}"></a>
+                            </div>
+
+                            <div class="vote-button-community-detail">
+                                <form role="form" method="post" th:action="@{/posts/{postId}/upvote(postId=${post.id})}" th:object="${upvotePost}">
+
+                                    <input type="hidden" name="returnUrl" th:value="@{/community/{communityName}(communityName=${community.name})}">
+
+                                    <input type="image" class="upvote-button-index" src="https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vector-up-arrow-icon-png-image_956434.jpg">
+
+                                </form>
+                                <span th:text="${post.votes}"></span>
+                                <form role="form" method="post" th:action="@{/posts/{postId}/downvote(postId=${post.id})}" th:object="${downvotePost}">
+
+                                    <input type="hidden" name="returnUrl" th:value="@{/community/{communityName}(communityName=${community.name})}">
+
+                                    <input type="image" class="downvote-button-index" src="https://png.pngtree.com/png-vector/20190411/ourmid/pngtree-vector-down-arrow-icon-png-image_925727.jpg">
+
+                                </form>
+
+
+                            </div>      
+                    </div>
+
+
+                </div>
+
+                <div class="right-pannel">
+                    <div class="community-detail-div">
+                        <h3 class="about-community-div">About Community</h3>
+                        <div class="community-detail-top-row">                      
+                            <span class="community-detail-name-div" th:text="${community.name}"></span>
+                            <div th:if="${user != null and user.id == community.createdBy.id}">
+                                <a class="edit-community" th:href="@{/community/{communityName}/edit(communityName=${community.name})}">Edit</a>
+                                <a class="delete-community" th:href="@{/communities/{communityName}/delete(communityName=${community.name})}">Delete</a>
+                            </div>
+                        </div>
+                        <span class="community-detail-description-div" th:text="${community.description}"></span>
+                        <span class="community-detail-created-on-div" th:text="${'Created On ' + #temporals.format(community.createdOn, 'dd-MM-yyyy, HH:mm')}"></span>
+                        <span class="community-detail-created-by-div" th:text="'Created By ' + ${community.createdBy.username}"></span>
+                        <span class="community-detail-membership-count-div" th:text="${membershipCount} + ' Members'"></span>
+                    </div>
+                
+                </div>
+
+            </div>
+
+        </div>
+
+        
+
+        
+
+        
+
+
+
+    </div>
+
+</body>
+
+</html>

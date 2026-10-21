@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+
+<body>
+    <div class="sub-body" layout:fragment="content">
+        <div class="main-content">
+
+            <div th:if="${message}">
+                <h1 th:text="${message}"></h1>
+            </div>
+
+            <div>
+                <a th:href="@{/posts/search?query={search}(search=${search})}">Posts</a>
+                <a th:href="@{/communities/search?query={search}(search=${search})}">Communities</a>
+                <a th:href="@{/comments/search?query={search}(search=${search})}">Comments</a>
+                <a th:href="@{/users/search?query={search}(search=${search})}">Users</a>
+            </div>
+
+            <div th:if="${emptyResults}">
+                <h1 th:text="${emptyResults}"></h1>
+            </div>
+
+
+
+            <div class="commemt-list-index" th:each="comment : ${comments}">
+                <div class="comment-list-top-row">
+                    <a th:href="@{/community/{communityName}(communityName=${comment.post.community.name})}"><img class="comment-community-profile-picture-index" th:src="${comment.post.community.communityPictureUrl}"></a>
+                    <a class="comment-list-community-name" th:href="@{/community/{communityName}(communityName=${comment.post.community.name})}"><span th:text="${comment.post.community.name}"></span></a>
+                    <a class="comment-list-comment-created-on-one" th:href="@{/community/{communityName}(communityName=${comment.post.community.name})}"><span th:text="${#temporals.format(comment.createdOn, 'dd-MM-yyyy, HH:mm')}"></span></a>
+                </div>
+
+                <a class="comment-list-post-title" th:href="@{/posts/{postId}(postId=${comment.post.id})}"><span th:text="${comment.post.title}"></span></a>
+
+                <div class="comment-list-comment-details">
+                    <div class="comment-list-comment-top-row">
+                        <a th:href="@{/profile/{vUserId}/posts(vUserId=${comment.createdBy.id})}"><img class="comment-user-profile-picture" th:src="${comment.createdBy.photoUrl}"></a>
+                        <a class="comment-list-comment-created-by" th:href="@{/profile/{vUserId}/posts(vUserId=${comment.createdBy.id})}"><span th:text="${comment.createdBy.username}"></span></a>
+                        <a class="comment-list-comment-created-on-two" th:href="@{/profile/{vUserId}/posts(vUserId=${comment.createdBy.id})}"><span th:text="${#temporals.format(comment.createdOn, 'dd-MM-yyyy, HH:mm')}"></span></a>
+                    </div>
+
+                    <a class="comment-list-comment" th:href="@{/posts/{postId}(postId=${comment.post.id})}"><span th:text="${comment.comment}"></span></a>
+                    <a class="comment-list-votes" th:href="@{/posts/{postId}(postId=${comment.post.id})}"><span th:text="${comment.votes} + ' votes'"></span></a>
+                </div>
+
+                
+                
+
+                
+
+            </div>
+        </div>
+    </div>
+
+
+
+    
+</body>
+
+</html>

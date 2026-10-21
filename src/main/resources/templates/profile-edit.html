@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html 
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}"
+>
+
+<body>
+    <div class="sub-body" layout:fragment="content">
+
+        <div class="main-content">
+
+            <div th:if="${param.fail}">
+                Username or email already exists
+            </div>
+
+            <div class="create-form-div">
+                <form class="register-form" method="post" role="form" th:action="@{/profile/{userId}/edit(userId=${user.id})}" th:object="${userEntityDto}">
+                    <label>Email</label>
+                    <input 
+                            type="text"
+                            placeholder="Email"
+                            th:field="*{email}"
+                            class="email-register-input"
+                    >
+                    <p th:if="${#fields.hasErrors('email')}"></p>
+                    <label>Photo Url</label>
+                    <input 
+                            type="text"
+                            placeholder="PhotoUrl"
+                            th:field="*{photoUrl}"
+                            class="photo-url-register-input"
+                    >
+                    <input class="create-button" th:href="@{/login}" type="submit" value="Update">
+
+
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    
+</body>
+
+</html>
