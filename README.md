@@ -117,8 +117,8 @@ The following needs to be installed:
 Clone the repository then navigate to the projects directory:
 
 ```
-git clone xxx
-cd xxx
+git clone https://github.com/pmusoke/discussion-platform.git
+cd discussion-platform
 ```
 
 2. Create the MySQL Database
